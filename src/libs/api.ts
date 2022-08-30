@@ -40,20 +40,18 @@ const useAPI = <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => 
     return data
 }
 
-const useUsers = () => {
+export const useUsers = () => {
     return useAPI<User[]>('http://192.168.11.10:8000/users', {mode: 'cors'})
 }
 
-const useDoors = () => {
+export const useDoors = () => {
     return useAPI<Door[]>('http://192.168.11.10:8000/doors', {mode: 'cors'})
 }
 
-const useActivityLogs = () => {
+export const useActivityLogs = () => {
     return useAPI<ActivityLog[]>('http://192.168.11.10:8000/logs/activities', {mode: 'cors'})
 }
 
-const useLockLogs = () => {
+export const useLockLogs = () => {
     return useAPI<LockLog[]>('http://192.168.11.10:8000/logs/locks', {mode: 'cors'})
 }
-
-export { useUsers, useDoors, useActivityLogs, useLockLogs }
