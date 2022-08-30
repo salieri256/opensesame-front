@@ -12,6 +12,10 @@ type User = {
     nfcId: string
 }
 
+type DoorBase = {
+    name: string
+}
+
 type Door = {
     id: number
     name: string
@@ -72,4 +76,17 @@ export const postUser = async (data: UserBase) => {
     }
     const user = await fetch('http://192.168.11.10:8000/users', init).then<User>(res => res.json())
     return user
+}
+
+export const postDoor = async (data: DoorBase) => {
+    const init: RequestInit = {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    }
+    const door = await fetch('http://192.168.11.10:8000/doors', init).then<Door>(res => res.json())
+    return door
 }
