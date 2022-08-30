@@ -2,6 +2,7 @@ import { postDoor } from '@/libs/api'
 import { Button, Container, Stack, TextField } from '@mui/material'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 interface IFormInput {
@@ -9,9 +10,11 @@ interface IFormInput {
 }
 
 const Home: NextPage = () => {
+  const router = useRouter()
   const { register, handleSubmit } = useForm<IFormInput>()
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const door = await postDoor(data)
+    router.replace('/doors')
   }
 
   return (
