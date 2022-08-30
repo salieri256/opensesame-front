@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react"
 
+type UserBase = {
+    name: string
+    nfcId: string
+}
+
 type User = {
     id: number
     name: string
@@ -54,4 +59,17 @@ export const useActivityLogs = () => {
 
 export const useLockLogs = () => {
     return useAPI<LockLog[]>('http://192.168.11.10:8000/logs/locks', {mode: 'cors'})
+}
+
+export const postUser = async (data: UserBase) => {
+    const init: RequestInit = {
+        mode: 'cors',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    }
+    const user = await fetch('http://192.168.11.10:8000/users', init).then<User>(res => res.json())
+    return user
 }
