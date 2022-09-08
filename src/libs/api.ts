@@ -1,92 +1,72 @@
-import { useEffect, useState } from "react"
+import axios from "axios"
+import useSWR from "swr"
+import type { UserBase, User } from "@/types/user"
+import type { DoorBase, Door } from "@/types/door"
+import type { ActivityLog } from "@/types/activityLog"
+import type { LockLog } from "@/types/lockLog"
 
-type UserBase = {
-    name: string
-    nfcId: string
+const API_BASE_URL = process.env.NEXT_PUBLIC_DB_SERVICE_BASE_URL
+
+const fetcher = async <T>(path: string) => {
+    return await axios.get<T>(API_BASE_URL + path).then(res => res.data)
 }
 
-type User = {
-    id: number
-    name: string
-    isActive: boolean
-    nfcId: string
+const poster = async <T>(path: string, data: any) => {
+    return await axios.post<T>(API_BASE_URL + path, data).then(res => res.data)
 }
 
-type DoorBase = {
-    name: string
+const putter = async <T>(path: string, data: any) => {
+    return await axios.put<T>(API_BASE_URL + path, data).then(res => res.data)
 }
 
-type Door = {
-    id: number
-    name: string
-    isLocked: boolean
-}
-
-type ActivityLog = {
-    id: number
-    unixTime: number
-    isActive: boolean
-    userId: number
-}
-
-type LockLog = {
-    id: number
-    unixTime: number
-    isLocked: boolean
-    doorId: number
-    userId: number
-}
-
-const useAPI = <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => {
-    const [data, setData] = useState<T>()
-
-    useEffect(() => {
-        fetch(input, init)
-        .then<T>(res => res.json())
-        .then(object => setData(object))
-    }, [])
-
-    return data
+const deleter = async (path: string) => {
+    return await axios.delete(API_BASE_URL + path).then(res => res.data)
 }
 
 export const useUsers = () => {
-    return useAPI<User[]>('http://192.168.11.10:8000/users', {mode: 'cors'})
+    return useSWR<User[]>('/users', fetcher)
 }
 
 export const useDoors = () => {
-    return useAPI<Door[]>('http://192.168.11.10:8000/doors', {mode: 'cors'})
+    return useSWR<Door[]>('/doors', fetcher)
 }
 
 export const useActivityLogs = () => {
-    return useAPI<ActivityLog[]>('http://192.168.11.10:8000/logs/activities', {mode: 'cors'})
+    return useSWR<ActivityLog[]>('/logs/activities', fetcher)
 }
 
 export const useLockLogs = () => {
-    return useAPI<LockLog[]>('http://192.168.11.10:8000/logs/locks', {mode: 'cors'})
+    return useSWR<LockLog[]>('/logs/locks', fetcher)
+}
+
+export const useUser = (userId: number) => {
+    return useSWR<User>(`/users/${userId}`, fetcher)
+}
+
+export const useDoor = (doorId: number) => {
+    return useSWR<Door>(`/doors/${doorId}`, fetcher)
 }
 
 export const postUser = async (data: UserBase) => {
-    const init: RequestInit = {
-        mode: 'cors',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    }
-    const user = await fetch('http://192.168.11.10:8000/users', init).then<User>(res => res.json())
-    return user
+    return await poster<User>('/users', data)
 }
 
 export const postDoor = async (data: DoorBase) => {
-    const init: RequestInit = {
-        mode: 'cors',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    }
-    const door = await fetch('http://192.168.11.10:8000/doors', init).then<Door>(res => res.json())
-    return door
+    return await poster<Door>('/doors', data)
+}
+
+export const putUser = async (userId: number, data: UserBase) => {
+    return await putter<User>(`/users/${userId}`, data)
+}
+
+export const putDoor = async (doorId: number, data: DoorBase) => {
+    return await putter<Door>(`/doors/${doorId}`, data)
+}
+
+export const deleteUser = async (userId: number) => {
+    return await deleter(`/users/${userId}`)
+}
+
+export const deleteDoor = async (doorId: number) => {
+    return await deleter(`/doors/${doorId}`)
 }
