@@ -6,19 +6,26 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
-type User = {
-  id: number
-  name: string
-  isActive: boolean
-  nfcId: string
-}
+import IconButton from '@mui/material/IconButton';
+import ModeIcon from '@mui/icons-material/Mode';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useRouter } from 'next/router';
+import type { User } from '@/types/user';
 
 type Props = {
   users: User[]
 }
 
-const UserList = (props: Props) => (
+const UserList = (props: Props) => {
+  const router = useRouter()
+  const onEditClick = (userId: number) => {
+    router.replace(`/users/${userId}/edit`)
+  }
+  const onDeleteClick = (userId: number) => {
+    router.replace(`/users/${userId}/delete`)
+  }
+
+  return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
@@ -27,6 +34,8 @@ const UserList = (props: Props) => (
             <TableCell align="right">Name</TableCell>
             <TableCell align="right">Status</TableCell>
             <TableCell align="right">NFC ID</TableCell>
+            <TableCell align='center'>Edit</TableCell>
+            <TableCell align='center'>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -40,12 +49,15 @@ const UserList = (props: Props) => (
                 <TableCell align="right">{user.name}</TableCell>
                 <TableCell align="right">{user.isActive ? 'Active' : 'Inactive'}</TableCell>
                 <TableCell align="right">{user.nfcId}</TableCell>
+                <TableCell align='center'><IconButton onClick={() => onEditClick(user.id)}><ModeIcon /></IconButton></TableCell>
+                <TableCell align='center'><IconButton onClick={() => onDeleteClick(user.id)}><DeleteIcon /></IconButton></TableCell>
               </TableRow>
             ))
           }
         </TableBody>
       </Table>
     </TableContainer>
-)
+  )
+}
 
 export default UserList

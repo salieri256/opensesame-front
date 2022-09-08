@@ -1,36 +1,33 @@
+import UserForm from '@/components/Forms/UserForm'
 import { postUser } from '@/libs/api'
-import { Button, Container, Stack, TextField } from '@mui/material'
+import { Button, Container, Stack } from '@mui/material'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { SubmitHandler, useForm } from 'react-hook-form'
-
-interface IFormInput {
-    name: string
-    nfcId: string
-}
 
 const Home: NextPage = () => {
   const router = useRouter()
-  const { register, handleSubmit } = useForm<IFormInput>()
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    const user = await postUser(data)
+  const onCancelClick = () => {
     router.replace('/users')
   }
 
   return (
     <>
       <Head>
-        <title>Home | OpenSesame</title>
+        <title>User registeration</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Container maxWidth="sm" sx={{ pt: 5 }}>
         <Stack spacing={3}>
-          <TextField required label="Name" {...register('name')} />
-          <TextField required label="NFC ID" {...register('nfcId')} />
-          <Button color="primary" variant="contained" size="large" onClick={handleSubmit(onSubmit)}>
-            Register
+          <UserForm onSubmit={(data) => {
+            postUser(data)
+            .then(() => {
+              router.replace('/users')
+            })
+          }} />
+          <Button color="inherit" variant="contained" size="large" onClick={onCancelClick}>
+            Cancel
           </Button>
         </Stack>
       </Container>

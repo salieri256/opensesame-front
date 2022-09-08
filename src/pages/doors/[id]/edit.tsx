@@ -1,5 +1,5 @@
 import DoorForm from '@/components/Forms/DoorForm'
-import { postDoor } from '@/libs/api'
+import { putDoor, useDoor } from '@/libs/api'
 import { Button, Container, Stack } from '@mui/material'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -11,21 +11,32 @@ const Home: NextPage = () => {
     router.replace('/doors')
   }
 
+  const doorId = Number(router.query.id)
+  const { data } = useDoor(doorId)
+
   return (
     <>
       <Head>
-        <title>Home | OpenSesame</title>
+        <title>Door registeration</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Container maxWidth="sm" sx={{ pt: 5 }}>
         <Stack spacing={3}>
-          <DoorForm onSubmit={(data) => {
-            postDoor(data)
-            .then(() => {
-              router.replace('/doors')
-            })
-          }} />
+          {
+            data === undefined ?
+            <></> :
+            <DoorForm
+            defaultValues={{
+              name: data?.name,
+            }}
+            onSubmit={(data) => {
+              putDoor(doorId, data)
+              .then(() => {
+                router.replace('/doors')
+              })
+            }} />
+          }
           <Button color="inherit" variant="contained" size="large" onClick={onCancelClick}>
             Cancel
           </Button>
