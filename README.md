@@ -17,7 +17,7 @@ NEXT_PUBLIC_DB_SERVICE_BASE_URL=
 
 ### Install dependencies
 ```shell
-$ yarn install --production
+$ yarn install
 ```
 
 ### Build
