@@ -30,7 +30,11 @@ const Home: NextPage = () => {
         <Stack spacing={3}>
           <Typography>Delete?</Typography>
           {
-            data === undefined ? <></> : <DoorList doors={[data]} />
+            data === undefined ?
+            <Typography>Fetching...</Typography> :
+            data === null ?
+            <Typography>No users</Typography> :
+            <DoorList doors={[data]} />
           }
           <Button color="error" variant="contained" size="large" onClick={() => onDeleteClick(doorId)}>
             Delete
