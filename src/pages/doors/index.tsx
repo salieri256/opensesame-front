@@ -23,11 +23,15 @@ const Home: NextPage = () => {
       <Layout>
         <Stack spacing={3}>
         {
-          data === undefined ?
+          data === undefined ? 
           <Typography>Fetching...</Typography> :
           <>
+          {
+            data === null ? 
+            <Typography>No doors</Typography> :
             <DoorList doors={data} />
-            <Button color="primary" variant="contained" size="large" onClick={onRegisterClick}>Add door</Button>
+          }
+          <Button color="primary" variant="contained" size="large" onClick={onRegisterClick}>Add door</Button>
           </>
         }
         </Stack>

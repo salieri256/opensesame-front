@@ -6,7 +6,7 @@ import LockLogList from '@/components/LockLogList'
 import { useLockLogs } from '@/libs/api'
 
 const Home: NextPage = () => {
-  const lockLogs = useLockLogs()
+  const { data } = useLockLogs()
 
   return (
     <>
@@ -17,7 +17,11 @@ const Home: NextPage = () => {
 
       <Layout>
       {
-        lockLogs.data === undefined ? <Typography>Fetching...</Typography> : <LockLogList lockLogs={lockLogs.data} />
+        data === undefined ?
+        <Typography>Fetching...</Typography> :
+        data === null ?
+        <Typography>No lock logs</Typography> :
+        <LockLogList lockLogs={data} />
       }
       </Layout>
     </>

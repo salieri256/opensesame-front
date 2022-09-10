@@ -24,10 +24,14 @@ const Home: NextPage = () => {
         <Stack spacing={3}>
         {
           data === undefined ?
-          <Typography>Fetching...</Typography> :
+          <Typography>Fetching...</Typography> : 
           <>
+          {
+            data === null ?
+            <Typography>No users</Typography> :
             <UserList users={data} />
-            <Button color="primary" variant="contained" size="large" onClick={onRegisterClick}>Add user</Button>
+          }
+          <Button color="primary" variant="contained" size="large" onClick={onRegisterClick}>Add user</Button>
           </>
         }
         </Stack>

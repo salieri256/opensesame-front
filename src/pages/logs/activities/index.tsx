@@ -17,7 +17,11 @@ const Home: NextPage = () => {
 
       <Layout>
       {
-        data === undefined ? <Typography>Fetching...</Typography> : <ActivityLogList activityLogs={data} />
+        data === undefined ?
+        <Typography>Fetching...</Typography> :
+        data === null ?
+        <Typography>No activity logs</Typography> :
+        <ActivityLogList activityLogs={data} />
       }
       </Layout>
     </>

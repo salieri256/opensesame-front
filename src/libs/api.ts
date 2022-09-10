@@ -8,7 +8,12 @@ import type { LockLog } from "@/types/lockLog"
 const API_BASE_URL = process.env.NEXT_PUBLIC_DB_SERVICE_BASE_URL
 
 const fetcher = async <T>(path: string) => {
-    return await axios.get<T>(API_BASE_URL + path).then(res => res.data)
+    return await axios.get<T>(API_BASE_URL + path).then(res => {
+        if (res.status === 204) {
+            return null
+        }
+        return res.data
+    })
 }
 
 const poster = async <T>(path: string, data: any) => {
@@ -24,27 +29,27 @@ const deleter = async (path: string) => {
 }
 
 export const useUsers = () => {
-    return useSWR<User[]>('/users', fetcher)
+    return useSWR<null | User[]>('/users', fetcher)
 }
 
 export const useDoors = () => {
-    return useSWR<Door[]>('/doors', fetcher)
+    return useSWR<null | Door[]>('/doors', fetcher)
 }
 
 export const useActivityLogs = () => {
-    return useSWR<ActivityLog[]>('/logs/activities', fetcher)
+    return useSWR<null | ActivityLog[]>('/logs/activities', fetcher)
 }
 
 export const useLockLogs = () => {
-    return useSWR<LockLog[]>('/logs/locks', fetcher)
+    return useSWR<null | LockLog[]>('/logs/locks', fetcher)
 }
 
 export const useUser = (userId: number) => {
-    return useSWR<User>(`/users/${userId}`, fetcher)
+    return useSWR<null | User>(`/users/${userId}`, fetcher)
 }
 
 export const useDoor = (doorId: number) => {
-    return useSWR<Door>(`/doors/${doorId}`, fetcher)
+    return useSWR<null | Door>(`/doors/${doorId}`, fetcher)
 }
 
 export const postUser = async (data: UserBase) => {
