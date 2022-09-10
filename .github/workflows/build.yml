@@ -1,0 +1,21 @@
+name: Build app
+on:
+  push:
+    branches: ["**"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 
+        uses: actions/setup-node@v2
+        with:
+          cache: yarn
+      
+      - name: Install dependencies
+        run:  yarn --production
+      
+      - name: Build
+        run:  yarn build
